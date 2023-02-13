@@ -1,2 +1,2 @@
-# harpoon-rootkit
+# Harpoon Rootkit
 Hunting penguins
