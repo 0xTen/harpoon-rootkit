@@ -1,1 +1,0 @@
-cmd_/home/xten/Documents/projects/nu/harpoon-rootkit/harpoon.ko := ld -r -m elf_x86_64 -z noexecstack --no-warn-rwx-segments --build-id=sha1  -T scripts/module.lds -o /home/xten/Documents/projects/nu/harpoon-rootkit/harpoon.ko /home/xten/Documents/projects/nu/harpoon-rootkit/harpoon.o /home/xten/Documents/projects/nu/harpoon-rootkit/harpoon.mod.o;  true
