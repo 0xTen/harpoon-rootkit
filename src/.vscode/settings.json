@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "list": "c",
+        "module.h": "c",
+        "global.h": "c"
+    }
+}

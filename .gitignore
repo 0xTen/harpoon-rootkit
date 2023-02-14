@@ -1,0 +1,3 @@
+# Ignore debugging environment
+test_env/
+test.sh
