@@ -1,5 +1,6 @@
 # Ignore debugging environment
 test_env/
+test_env_setup.sh
 test.sh
 
 *.vscode*

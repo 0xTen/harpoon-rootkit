@@ -32,10 +32,11 @@ struct harpoon_hook *harpoon_new_hook(char *name, void *func, __u8 recur_prot){
     new_hook->self = func;
 
     new_hook->sym_addr = harpoon_lookup_name(name);
-    *((unsigned long*) new_hook->legit) = new_hook->sym_addr;
 
     if(recur_prot == FENTRY_OFF){
-        *((unsigned long*) new_hook->legit) += MCOUNT_INSN_SIZE;
+        new_hook->legit = (void *) (new_hook->sym_addr + MCOUNT_INSN_SIZE);
+    } else {
+        new_hook->legit = (void *) new_hook->sym_addr;
     }
 
     new_hook->recur_prot = recur_prot;
