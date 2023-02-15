@@ -23,7 +23,7 @@ __u64 harpoon_lookup_name(char *name){
     return kallsyms_lookup_name(name);
 }
 
-struct harpoon_hook *harpoon_new_hook(char *name, void *func, void *legit, __u8 recur_prot){
+struct harpoon_hook *harpoon_new_hook(char *name, void *func, __u8 recur_prot){
     size_t namelen = strlen(name);
     struct harpoon_hook *new_hook = kmalloc(sizeof(struct harpoon_hook), GFP_KERNEL);
 
@@ -31,9 +31,11 @@ struct harpoon_hook *harpoon_new_hook(char *name, void *func, void *legit, __u8 
     memcpy(new_hook->name, name, namelen);
     new_hook->self = func;
 
-    new_hook->legit = legit;
+    new_hook->sym_addr = harpoon_lookup_name(name);
+    *((unsigned long*) new_hook->legit) = new_hook->sym_addr;
+
     if(recur_prot == FENTRY_OFF){
-        new_hook->legit += MCOUNT_INSN_SIZE;
+        *((unsigned long*) new_hook->legit) += MCOUNT_INSN_SIZE;
     }
 
     new_hook->recur_prot = recur_prot;
