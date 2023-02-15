@@ -7,18 +7,10 @@
 /* LKM container */
 struct harpoon_module {
     struct list_head list;
+    struct mutex lock;
     struct module *self;
     struct module *prev;
-    struct mutex lock;
     __u8 is_hidden;
-};
-
-/* Hook container */
-struct harpoon_hook {
-    struct list_head list;
-    __u8 is_hooked;
-    void *legit;
-    void *hooked;
 };
 
 struct harpoon_module *harpoon_new_mod(struct module *module);

