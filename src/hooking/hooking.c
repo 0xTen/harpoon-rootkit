@@ -38,7 +38,6 @@ struct harpoon_hook *harpoon_new_hook(char *name, void *func, __u8 recur_prot){
     } else {
         new_hook->legit = (void *) new_hook->sym_addr;
     }
-
     new_hook->recur_prot = recur_prot;
     new_hook->is_hooked = 0;
     mutex_init(&new_hook->lock);
@@ -57,7 +56,7 @@ void harpoon_del_hook(struct harpoon_hook *hook){
 void harpoon_handle(long unsigned ip, long unsigned parent_ip, struct ftrace_ops *ops, struct ftrace_regs *fregs){
     struct harpoon_hook *hook = container_of(ops, struct harpoon_hook, ops);
     struct pt_regs *regs = ftrace_get_regs(fregs);
-
+    
     if (within_module(parent_ip, THIS_MODULE) && hook->recur_prot == RECUR_DETECT){
         return;
     }
@@ -75,6 +74,9 @@ void harpoon_hook(struct harpoon_hook *hook){
 	hook->ops.flags = FTRACE_OPS_FL_SAVE_REGS
 	                | FTRACE_OPS_FL_RECURSION
 	                | FTRACE_OPS_FL_IPMODIFY;
+
+    hook->ops.local_hash.notrace_hash = NULL;
+    hook->ops.local_hash.filter_hash = NULL;
 
     if(ftrace_set_filter_ip(&hook->ops, hook->sym_addr, 0, 0)){
         return;
