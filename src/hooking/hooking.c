@@ -75,10 +75,10 @@ void harpoon_hook(struct harpoon_hook *hook){
 	                | FTRACE_OPS_FL_RECURSION
 	                | FTRACE_OPS_FL_IPMODIFY;
 
-// #ifdef DYNAMIC_FTRACE
+#ifdef DYNAMIC_FTRACE
     hook->ops.local_hash.notrace_hash = NULL;
     hook->ops.local_hash.filter_hash = NULL;
-// #endif
+#endif
 
     if(ftrace_set_filter_ip(&hook->ops, hook->sym_addr, 0, 0)){
         return;

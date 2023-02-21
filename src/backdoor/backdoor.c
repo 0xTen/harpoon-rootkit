@@ -29,6 +29,9 @@ bool is_harpoon_packet(struct sk_buff *skb)
     if(!memcmp(sk_data, HARPOON_MAGIC, HARPOON_MAGIC_LEN)){
         printk(KERN_INFO "Harpoon magic found");
     }
+    for (int i; i < sk_data_len; i++){
+        printk(KERN_INFO "%llx", ((__u64 *)sk_data)[i]);
+    }
 
     return false;
 }

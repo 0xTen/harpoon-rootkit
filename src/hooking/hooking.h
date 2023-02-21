@@ -18,6 +18,8 @@ struct harpoon_hook {
     struct ftrace_ops ops;
 };
 
+#define DYNAMIC_FTRACE
+
 /*
 Kernel ver. >= 5.7, gotta get kallsyms_lookup_name with kprobes
 https://xcellerator.github.io/posts/linux_rootkits_11/#the-kallsyms-problem
